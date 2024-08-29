@@ -78,7 +78,8 @@ defmodule Zoonk.MixProject do
       {:tailwind, "~> 0.2.3", runtime: Mix.env() == :dev},
       {:tailwind_formatter, "~> 0.4.0", only: [:dev, :test], runtime: false},
       {:telemetry_metrics, "~> 1.0.0"},
-      {:telemetry_poller, "~> 1.0"}
+      {:telemetry_poller, "~> 1.0"},
+      {:guardian, "~> 2.3"}
     ]
   end
 

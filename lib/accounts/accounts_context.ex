@@ -12,6 +12,7 @@ defmodule Zoonk.Accounts do
   alias Zoonk.Mailer
   alias Zoonk.Organizations.School
   alias Zoonk.Repo
+  alias Zoonk.Shared.Guardian
   alias Zoonk.Shared.Utilities
 
   @type user_changeset :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
@@ -111,6 +112,24 @@ defmodule Zoonk.Accounts do
     user = get_user_by_email_or_username(email_or_username)
     if User.valid_password?(user, password), do: user
   end
+
+  @doc """
+  Gets a single user.
+
+  Returns nil if the User does not exist.
+
+  ## Examples
+
+      iex> get_user(123)
+      %User{}
+
+      iex> get_user(456)
+      nil
+
+  """
+
+  @spec get_user(integer()) :: User.t()
+  def get_user(id), do: Repo.get(User, id)
 
   @doc """
   Gets a single user.
@@ -380,6 +399,12 @@ defmodule Zoonk.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _error} -> {:error, changeset}
     end
+  end
+
+  @spec generate_jwt(User.t()) :: String.t()
+  def generate_jwt(user) do
+    {_ok, token, _claims} = Guardian.encode_and_sign(user)
+    token
   end
 
   ## Session

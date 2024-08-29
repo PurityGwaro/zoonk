@@ -29,6 +29,8 @@ config :zoonk, Zoonk.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :zoonk, Zoonk.Shared.Guardian, secret_key: System.get_env("GUARDIAN_SECRET")
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

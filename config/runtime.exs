@@ -94,6 +94,14 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST")
   port = String.to_integer(System.get_env("PORT") || "8080")
 
+  guardian_secret =
+    System.get_env("GUARDIAN_SECRET") ||
+      raise """
+      environment variable GUARDIAN_SECRET is missing.
+      """
+
+  config :zoonk, Zoonk.Shared.Guardian, secret_key: guardian_secret
+
   # Start a new server using FLAME and Fly
   config :flame, FLAME.FlyBackend,
     cpu_kind: "performance",

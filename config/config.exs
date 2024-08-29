@@ -90,6 +90,8 @@ if Mix.env() == :dev do
     clear: true
 end
 
+config :zoonk, Zoonk.Shared.Guardian, issuer: "zoonk"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -3,6 +3,8 @@ defmodule Zoonk.Shared.Utilities do
   Shared utilities for common use cases.
   """
 
+  alias Ecto.Changeset
+
   @doc """
   Convert a string into a boolean.
 
@@ -74,4 +76,26 @@ defmodule Zoonk.Shared.Utilities do
   @spec round_currency(float()) :: String.t()
   def round_currency(currency) when currency == round(currency), do: currency |> round() |> Integer.to_string()
   def round_currency(currency), do: :erlang.float_to_binary(currency, decimals: 2)
+
+  @doc """
+  Traverses changeset errors and returns them in a map.
+
+  ## Examples
+
+      iex> traverse_errors(changeset)
+      %{
+      password: ["at least one digit or punctuation character"],
+      email: ["must have a domain name", "must have the @ sign and no spaces"]
+      }
+  """
+  @spec traverse_errors(Ecto.Changeset.t()) :: map()
+  def traverse_errors(changeset) do
+    Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
+        opts
+        |> Keyword.get(String.to_existing_atom(key), key)
+        |> to_string()
+      end)
+    end)
+  end
 end
